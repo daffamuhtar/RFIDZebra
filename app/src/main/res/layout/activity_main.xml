@@ -1,19 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="12dp"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/textRfid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="RFID Status: " />
+
+    <TextView
+        android:id="@+id/textViewStatusrfid"
+        android:layout_below="@+id/textRfid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0.5dp"
+        android:layout_below="@+id/textViewStatusrfid"
+        android:orientation="horizontal"
+        android:id="@+id/layout">
+
+        <Button
+            android:id="@+id/connectButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="lalala"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/textViewStatusrfid"
+            android:text="Connect RFD"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/TestButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="StartInventory"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/textViewStatusrfid"
+            android:text="Start Scan"
+            android:textSize="10sp" />
+
+        <Button
+            android:id="@+id/TestButton2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="StopInventory"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/textViewStatusrfid"
+            android:text="Stop Scan"
+            android:textSize="10sp"
+            android:enabled="false"/>
+
+        <Button
+            android:id="@+id/clearTagIDButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="clearTagID"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/textViewStatusrfid"
+            android:text="Clear Tag ID"
+            android:textSize="10sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/deep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buttonHigh"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="@color/grey"
+            android:textColor="@color/black"
+            android:layout_margin="5dp"
+            android:text="High" />
+
+        <Button
+            android:id="@+id/buttonQuiet"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:backgroundTint="@color/adFilling"
+            android:text="Quiet" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:layout_below="@+id/deep"
+        android:orientation="horizontal"
+        android:id="@+id/layout2">
+
+        <TextView
+            android:id="@+id/TagID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TAG ID: " />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/layout2"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="-1dp">
+
+        <TextView
+            android:id="@+id/edittextrfid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="none|textMultiLine" />
+
+    </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

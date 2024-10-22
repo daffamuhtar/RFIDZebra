@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.rfidzebra.ui.feature.navigation.fragment.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/toolsFragment"
+        android:name="com.example.rfidzebra.ui.feature.navigation.fragment.ToolsFragment"
+        android:label="fragment_course"
+        tools:layout="@layout/fragment_tools" />
+    <fragment
+        android:id="@+id/funnelFragment"
+        android:name="com.example.rfidzebra.ui.feature.navigation.fragment.FunnelFragment"
+        android:label="fragment_scan"
+        tools:layout="@layout/fragment_funnel" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.example.rfidzebra.ui.feature.navigation.fragment.AccountFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_account" />
+</navigation>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="DefaultText" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="TextLogin" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="ButtonDefault">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:backgroundTint">@color/grey</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">16sp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="ButtonAsset">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:backgroundTint">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <style name="ButtonDefault2">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">12sp</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="fontFamily">@font/poppins_regular</item>
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <dimen name="locationing_font_size">10sp</dimen>
+
+    <declare-styleable name="RangeGraph">
+        <!-- Allow optional setting of min and max from the XML layout -->
+        <attr name="minimum" format="integer"/>
+        <attr name="maximum" format="integer"/>
+        <!-- Provide an Orientation parameter as an enum ** Not implemented yet! -->
+        <attr name="orientation" format="enum">
+            <enum name="vertical" value="0"/>
+            <enum name="horizontal" value="1"/>
+        </attr>
+        <!-- Allow to override the default colors for plain, In, and Out of Range -->
+        <attr name="colorNeutral" format="color" />
+        <attr name="colorInRange" format="color" />
+        <attr name="colorOutOfRange" format="color" />
+    </declare-styleable>
+
+    <!-- Font for the multitag locate inventory list -->
+    <style name="style_multitag_locate_inventory_list_font">
+        <item name="android:textSize">13sp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
+    <!-- Font for the multitag locate inventory list -->
+    <style name="style_multitag_locate_progressbar_horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@android:drawable/progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_indeterminate_horizontal</item>
+        <item name="android:minHeight">13sp</item>
+        <item name="android:maxHeight">13sp</item>
+        <item name="android:mirrorForRtl">true</item>
+    </style>
+
+</resources>

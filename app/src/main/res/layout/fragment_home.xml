@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/greyProfile"
+    tools:context=".ui.feature.navigation.fragment.HomeFragment">
+
+    <TextView
+        android:id="@+id/tvHome"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="CIST WADIG"
+        android:textSize="28dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvHome2"
+        style="@style/DefaultText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pilih menu di bawah!"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHome" />
+
+    <Button
+        android:id="@+id/imageButtonProcurement"
+        style="@style/ButtonDefault2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        android:padding="40dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/label"
+        android:text="Inbound Procurement"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@id/imageButtonAmb"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvHome2" />
+
+    <Button
+        android:id="@+id/imageButtonAmb"
+        style="@style/ButtonDefault2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="8dp"
+        android:padding="40dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/label"
+        android:text="Inbound AMB"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButtonProcurement"
+        app:layout_constraintTop_toBottomOf="@id/tvHome2" />
+
+    <Button
+        android:id="@+id/imageButtonOutbound"
+        style="@style/ButtonDefault2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:padding="40dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/label"
+        android:text="Outbound"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@id/imageButtonPutaway"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonProcurement" />
+
+    <Button
+        android:id="@+id/imageButtonPutaway"
+        style="@style/ButtonDefault2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:padding="40dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/label"
+        android:text="Putaway"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButtonOutbound"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonAmb" />
+
+    <Button
+        android:id="@+id/imageButtonOpname"
+        style="@style/ButtonDefault2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:padding="40dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/label"
+        android:text="Stock Opname"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@id/imageButtonCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonOutbound" />
+
+    <Button
+        android:id="@+id/imageButtonCount"
+        style="@style/ButtonDefault2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        android:padding="40dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/label"
+        android:text="Count Label"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageButtonOpname"
+        app:layout_constraintTop_toBottomOf="@id/imageButtonPutaway" />
+
+    <Button
+        android:id="@+id/imageButtonLocate"
+        style="@style/ButtonDefault2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/label"
+        android:padding="40dp"
+        android:text="Locate Tag"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageButtonCount"
+        app:layout_constraintStart_toStartOf="@+id/imageButtonOpname"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonOpname" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

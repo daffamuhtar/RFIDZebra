@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/grey_stripe"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvAssetScan"
+            style="@style/DefaultText"
+            android:layout_marginStart="4dp"
+            android:text="Asset No :"
+            android:textColor="@android:color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_ticket"
+            style="@style/DefaultText"
+            android:layout_marginStart="4dp"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/tvAssetScan"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="RS-123456-N001" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/DefaultText"
+            android:drawablePadding="4dp"
+            android:text="RFID No :"
+            android:textColor="@color/grey"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@+id/tvAssetScan"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ticket" />
+
+        <TextView
+            android:id="@+id/tvDateOutbound"
+            style="@style/DefaultText"
+            android:drawablePadding="4dp"
+            android:textColor="@color/grey"
+            android:textSize="11sp"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@+id/tv_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_ticket"
+            tools:text="N44069-Z00001D" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

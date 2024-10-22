@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Blue Stripe -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/blue" />
+            <size android:width="8dp" />
+        </shape>
+    </item>
+
+    <!-- White Card Background -->
+    <item android:bottom="0dp" android:left="8dp" android:right="0dp" android:top="0dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/white" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+
+    <!-- Border for Top, Bottom, and Right -->
+    <item android:bottom="0dp" android:left="8dp" android:right="0dp" android:top="0dp">
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="2dp"
+                android:color="@color/blue" />
+            <!-- Ensure the corner radius matches the white background -->
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+</layer-list>
