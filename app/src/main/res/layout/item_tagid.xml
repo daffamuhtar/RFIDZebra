@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="0dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="6dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@drawable/grey_stripe"
+        android:orientation="horizontal">
+
+        <!-- Bagian kiri berisi informasi TagID dan lainnya -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTagID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tag ID: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvPeakRSSI"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Peak RSSI: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvAntennaID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Antenna ID: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvCRC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CRC: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvTagSeenCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tag Seen Count: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvPhaseInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phase Info: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvChannelIndex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Channel Index: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvMemoryBankData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Memory Bank Data: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvTID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TID: "
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvUserData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Data: "
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTagIDCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="0"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

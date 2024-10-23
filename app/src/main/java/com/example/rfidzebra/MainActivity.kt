@@ -9,12 +9,16 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.rfidzebra.databinding.ActivityMainBinding
 import com.example.rfidzebra.ui.TagItem
 import com.zebra.rfid.api3.BatteryStatistics
@@ -25,16 +29,15 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
     lateinit var binding: ActivityMainBinding
     private var rfidHandler: RFIDHandler? = null
 
-    private val TAG = "BatteryLoggg"
-
     private var batteryStatistics: BatteryStatistics? = null
 
     private val bluetoothAdapter: BluetoothAdapter? by lazy {
         BluetoothAdapter.getDefaultAdapter()
     }
 
-    private lateinit var tagLocateAdapter: TagAdapter
-    private val tagList = mutableListOf<TagItem>()
+    private lateinit var adapter: TagAdapter
+    private val tagDataList = mutableListOf<TagData>()
+    private val tagCountMap = mutableMapOf<String, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,6 +145,12 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
 //            }
 //        }
 
+        // Initialize RecyclerView and set the adapter
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewTags)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = TagAdapter(tagDataList, tagCountMap)
+        recyclerView.adapter = adapter
+
     }
 
     private fun isRFIDConnected(): Boolean {
@@ -174,12 +183,12 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
     }
 
     // Helper method to show success toast
-    fun showToastSuccess(message: String) {
+    private fun showToastSuccess(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
     // Helper method to show error toast
-    fun showToastError(message: String) {
+    private fun showToastError(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
@@ -256,71 +265,75 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
     }
 
     fun StartInventory(view: View?) {
-        binding.edittextrfid.text = ""
+        if (isRFIDConnected()) {
+            tagDataList.clear()
+            tagCountMap.clear()
+            adapter.notifyDataSetChanged()
 
-        rfidHandler!!.performInventory()
+            rfidHandler!!.performInventory()
 
-        binding.TestButton.isEnabled = false
-        binding.TestButton2.isEnabled = true
+            binding.TestButton.isEnabled = false
+            binding.TestButton2.isEnabled = true
 
-        Log.d("edittextrfid", "TAG ID: ${binding.edittextrfid}")
+            Log.d("RecyclerView", "Inventory started, cleared previous data")
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                StopInventory(view)
+            }, 2000)
+        } else {
+            showToastError("RFID not connected. Please connect first.")
+        }
     }
 
     fun StopInventory(view: View?) {
-        rfidHandler!!.stopInventory()
+        if (isRFIDConnected()) {
+            rfidHandler!!.stopInventory()
 
-        binding.TestButton.isEnabled = true
-        binding.TestButton2.isEnabled = false
+            binding.TestButton.isEnabled = true
+            binding.TestButton2.isEnabled = false
+        } else {
+            showToastError("RFID not connected. Please connect first.")
+        }
     }
 
 
     fun clearTagID() {
-        binding.edittextrfid.text = ""
+        tagDataList.clear()
+        tagCountMap.clear()
+        adapter.notifyDataSetChanged()
+        Log.d("RecyclerView", "TAG data cleared")
     }
 
     override fun handleTagdata(tagData: Array<TagData?>?) {
-        val sb = StringBuilder()
         if (tagData != null) {
-            for (index in tagData.indices) {
-                val data = tagData[index]!!
+            for (data in tagData) {
+                data?.let {
+                    val currentCount = tagCountMap.getOrDefault(it.tagID, 0)
+                    tagCountMap[it.tagID] = currentCount + 1
 
-                val tagID = data.tagID
-                val peakRSSI = data.peakRSSI
-                val antennaID = data.antennaID
-                val crc = data.crc
-                val tagSeenCount = data.tagSeenCount
-                val phaseInfo = data.phase
-                val channelIndex = data.channelIndex
-                val memoryBankData = data.memoryBankData
-                val tid = data.tid
-                val user = data.user
+                    if (!tagDataList.any { tag -> tag.tagID == it.tagID }) {
+                        tagDataList.add(it)
+                    }
+                }
+            }
 
-                sb.append("Tag ID: $tagID\n")
-                sb.append("Peak RSSI: $peakRSSI\n")
-                sb.append("Antenna ID: $antennaID\n")
-                sb.append("CRC: $crc\n")
-                sb.append("Tag Seen Count: $tagSeenCount\n")
-                sb.append("Phase Info: $phaseInfo\n")
-                sb.append("Channel Index: $channelIndex\n")
-                sb.append("Memory Bank Data: $memoryBankData\n")
-                sb.append("TID: $tid\n")
-                sb.append("User Data: $user\n")
-                sb.append("--------------------\n")
-
-                Log.d("RFID_TAG", "Tag ID: $tagID, Peak RSSI: $peakRSSI, Antenna ID: $antennaID")
+            runOnUiThread {
+                adapter.notifyDataSetChanged()
             }
         }
-
-        runOnUiThread { binding.edittextrfid.append(sb.toString()) }
     }
-
-
 
     override fun handleTriggerPress(pressed: Boolean) {
         if (pressed) {
-            runOnUiThread { binding.edittextrfid.text = "" }
+            runOnUiThread {
+                tagDataList.clear()
+                tagCountMap.clear()
+                adapter.notifyDataSetChanged()
+            }
             rfidHandler!!.performInventory()
-        } else rfidHandler!!.stopInventory()
+        } else {
+            rfidHandler!!.stopInventory()
+        }
     }
 
     override fun barcodeData(`val`: String?) {
