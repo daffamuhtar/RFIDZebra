@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
     lateinit var binding: ActivityMainBinding
     private var rfidHandler: RFIDHandler? = null
 
-    private val TAG = "BatteryLog"
+    private val TAG = "BatteryLoggg"
 
     private var batteryStatistics: BatteryStatistics? = null
 
