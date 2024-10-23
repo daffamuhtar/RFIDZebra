@@ -169,7 +169,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
         try {
             rfidHandler?.setBattery()
         } catch (e: Exception) {
-            showToastError("Failed to set beeper volumee")
+            showToastError("Failed to set beeper volume")
         }
     }
 
