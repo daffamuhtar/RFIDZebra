@@ -80,6 +80,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
         binding.connectButton.setOnClickListener {
             val result = rfidHandler?.connectReader()
             binding.textViewStatusrfid.text = result.toString()
+
         }
 
         binding.buttonHigh.setOnClickListener {
