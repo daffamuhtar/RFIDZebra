@@ -3,10 +3,8 @@ package com.example.rfidzebra
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rfidzebra.ui.TagItem
 import com.zebra.rfid.api3.TagData
 
 class TagAdapter(private val tagDataList: MutableList<TagData>, private val tagCountMap: MutableMap<String, Int>) :
@@ -44,7 +42,15 @@ class TagAdapter(private val tagDataList: MutableList<TagData>, private val tagC
         holder.tid.text = "TID: ${data.tid}"
         holder.userData.text = "User Data: ${data.user}"
 
-        holder.tagIDCount.text = tagCountMap[data.tagID].toString()
+        if (data.isContainsLocationInfo) {
+
+            holder.tagIDCount.text = " Count : ${tagCountMap[data.tagID].toString()}\n\n Distance : ${data.LocationInfo.relativeDistance.toString()}"
+
+        }else{
+            holder.tagIDCount.text = tagCountMap[data.tagID].toString()
+
+        }
+
     }
 
     override fun getItemCount(): Int = tagDataList.size

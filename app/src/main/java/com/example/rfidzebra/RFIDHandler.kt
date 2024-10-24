@@ -135,12 +135,12 @@ class RFIDHandler(
         try {
             reader?.Actions?.TagLocationing?.Perform(tagID, null, null)
 
-            Handler(Looper.getMainLooper()).postDelayed({
-                (context as? Activity)?.runOnUiThread {
-//                    binding.tagProgress.progress = 0
-//                    binding.tagPercent.text = "0%"
-                }
-            }, 5000)
+//            Handler(Looper.getMainLooper()).postDelayed({
+//                (context as? Activity)?.runOnUiThread {
+////                    binding.tagProgress.progress = 0
+////                    binding.tagPercent.text = "0%"
+//                }
+//            }, 5000)
 
         } catch (e: InvalidUsageException) {
             e.printStackTrace()
@@ -456,6 +456,7 @@ class RFIDHandler(
     @Synchronized
     fun performInventory() {
         try {
+//            reader!!.Actions.TagLocationing.Perform("E2801191A503006783E5CF29", null, null)
             reader!!.Actions.Inventory.perform()
         } catch (e: InvalidUsageException) {
             e.printStackTrace()
@@ -467,6 +468,7 @@ class RFIDHandler(
     @Synchronized
     fun stopInventory() {
         try {
+//            reader!!.Actions.TagLocationing.Stop()
             reader!!.Actions.Inventory.stop()
         } catch (e: InvalidUsageException) {
             e.printStackTrace()
@@ -481,6 +483,8 @@ class RFIDHandler(
         // Read Event Notification
         override fun eventReadNotify(e: RfidReadEvents) {
             val myTags = reader!!.Actions.getReadTags(100)
+//            setLocate("E2801191A503006783E5CF29")
+
             if (myTags != null) {
                 for (index in myTags.indices) {
                     //  Log.d(TAG, "Tag ID " + myTags[index].getTagID());
@@ -489,6 +493,7 @@ class RFIDHandler(
                         "Tag ID" + myTags[index].tagID + "RSSI value " + myTags[index].peakRSSI
                     )
                     Log.d(TAG, "RSSI value " + myTags[index].peakRSSI)
+
                     /* To get the RSSI value*/   //   Log.d(TAG, "RSSI value "+ myTags[index].getPeakRSSI());
                 }
                 AsyncDataUpdate().execute(arrayOf(*myTags))

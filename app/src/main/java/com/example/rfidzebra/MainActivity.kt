@@ -329,6 +329,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
                 tagDataList.clear()
                 tagCountMap.clear()
                 adapter.notifyDataSetChanged()
+
             }
             rfidHandler!!.performInventory()
         } else {
