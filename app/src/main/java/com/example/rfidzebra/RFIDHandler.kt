@@ -12,6 +12,7 @@ import com.zebra.rfid.api3.ENUM_TRIGGER_MODE
 import com.zebra.rfid.api3.HANDHELD_TRIGGER_EVENT_TYPE
 import com.zebra.rfid.api3.INVENTORY_STATE
 import com.zebra.rfid.api3.InvalidUsageException
+import com.zebra.rfid.api3.MEMORY_BANK
 import com.zebra.rfid.api3.OperationFailureException
 import com.zebra.rfid.api3.RFIDReader
 import com.zebra.rfid.api3.ReaderDevice
@@ -25,6 +26,7 @@ import com.zebra.rfid.api3.SL_FLAG
 import com.zebra.rfid.api3.START_TRIGGER_TYPE
 import com.zebra.rfid.api3.STATUS_EVENT_TYPE
 import com.zebra.rfid.api3.STOP_TRIGGER_TYPE
+import com.zebra.rfid.api3.TagAccess
 import com.zebra.rfid.api3.TagData
 import com.zebra.rfid.api3.TriggerInfo
 import com.zebra.scannercontrol.DCSSDKDefs
@@ -32,6 +34,8 @@ import com.zebra.scannercontrol.DCSScannerInfo
 import com.zebra.scannercontrol.FirmwareUpdateEvent
 import com.zebra.scannercontrol.IDcsSdkApiDelegate
 import com.zebra.scannercontrol.SDKHandler
+import kotlin.math.log
+
 
 class RFIDHandler(
     private var context: MainActivity
@@ -150,13 +154,53 @@ class RFIDHandler(
     }
 
     fun setWrite() {
+
+        val tagsToWrite = listOf(
+            "E28011700000021B2A659AAA" to "E28011700000021B2A659AAB",
+            "B50C11700000021B2A659BEC" to "B50C11700000021B2A659BEB",
+            "E28011700000021B2A659BCA" to "E28011700000021B2A659BCB"
+        )
+
         try {
-            reader?.Actions?.MultiTagLocate?.perform()
+
+            for ((tagId, writeData) in tagsToWrite) {
+                val tagData: TagData? = null
+                val tagAccess = TagAccess()
+                val writeAccessParams = tagAccess.WriteAccessParams()
+
+                writeAccessParams.accessPassword = 0
+
+                writeAccessParams.memoryBank = MEMORY_BANK.MEMORY_BANK_EPC
+
+                writeAccessParams.offset = 2
+
+                writeAccessParams.setWriteData(writeData)
+
+                writeAccessParams.writeDataLength = writeData.length / 4
+
+                reader!!.Actions.TagAccess.writeWait(tagId, writeAccessParams, null, tagData)
+
+            }
+
+            showToastSuccess("All tags written successfully!")
+
+
         } catch (e: InvalidUsageException) {
             e.printStackTrace()
+            showToastError("Failed to set data")
         } catch (e: OperationFailureException) {
             e.printStackTrace()
+            showToastError("Failed to set data 1")
         }
+    }
+
+
+    private fun showToastSuccess(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showToastError(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     fun setAntenna() {

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.rfidzebra.databinding.ActivityMainBinding
 import com.example.rfidzebra.ui.TagItem
 import com.zebra.rfid.api3.BatteryStatistics
+import com.zebra.rfid.api3.MEMORY_BANK
 import com.zebra.rfid.api3.TagData
 
 class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
@@ -104,6 +105,14 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
         binding.buttonAntenna.setOnClickListener {
             if (isRFIDConnected()) {
                 setInAntenna()
+            } else {
+                showToastError("RFID not connected. Please connect first.")
+            }
+        }
+
+        binding.buttonWrite.setOnClickListener {
+            if (isRFIDConnected()) {
+                setWriteData()
             } else {
                 showToastError("RFID not connected. Please connect first.")
             }
@@ -195,6 +204,14 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
             showToastSuccess("Antenna success to set")
         } catch (e: Exception) {
             showToastError("Failed to set antenna")
+        }
+    }
+
+    private fun setWriteData() {
+        try {
+            rfidHandler?.setWrite()
+        } catch (e: Exception) {
+            showToastError("Failed to start write")
         }
     }
 
