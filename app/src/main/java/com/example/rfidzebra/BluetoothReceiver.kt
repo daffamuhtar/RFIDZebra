@@ -9,9 +9,9 @@ import com.example.rfidzebra.databinding.ActivityHomeBinding
 class BluetoothReceiver(private val binding: ActivityHomeBinding) : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        if (intent?.action == BluetoothAdapter.ACTION_STATE_CHANGED) {
-            val state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
-            binding.bluetoothSwitchCompat.isChecked = state == BluetoothAdapter.STATE_ON
-        }
+//        if (intent?.action == BluetoothAdapter.ACTION_STATE_CHANGED) {
+//            val state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
+//            binding.bluetoothSwitchCompat.isChecked = state == BluetoothAdapter.STATE_ON
+//        }
     }
 }

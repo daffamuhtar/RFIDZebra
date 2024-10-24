@@ -101,6 +101,13 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
             }
         }
 
+        binding.buttonAntenna.setOnClickListener {
+            if (isRFIDConnected()) {
+                setInAntenna()
+            } else {
+                showToastError("RFID not connected. Please connect first.")
+            }
+        }
 //        binding.buttonBattery.setOnClickListener {
 //            if (isRFIDConnected()) {
 //                displayBatteryStatistics()
@@ -179,6 +186,15 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
             showToastSuccess("Beeper volume set to: $volume")
         } catch (e: Exception) {
             showToastError("Failed to set beeper volume")
+        }
+    }
+
+    private fun setInAntenna() {
+        try {
+            rfidHandler?.setAntenna()
+            showToastSuccess("Antenna success to set")
+        } catch (e: Exception) {
+            showToastError("Failed to set antenna")
         }
     }
 

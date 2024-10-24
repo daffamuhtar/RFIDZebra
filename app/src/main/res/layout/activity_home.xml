@@ -7,100 +7,15 @@
     android:padding="16dp"
     tools:context=".ui.home.HomeActivity">
 
-    <!-- Bluetooth label and switch -->
-    <TextView
-        android:id="@+id/bluetoothText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Bluetooth"
-        style="@style/DefaultText"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- Bluetooth on off switch -->
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/bluetoothSwitchCompat"
+    <com.google.android.material.slider.Slider
+        android:id="@+id/slider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/bluetoothText"
-        app:layout_constraintStart_toEndOf="@+id/bluetoothText"
-        app:layout_constraintTop_toTopOf="@+id/bluetoothText" />
-
-    <!-- TextView for Search label (left) -->
-    <TextView
-        android:id="@+id/deviceListLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Device List"
-        style="@style/DefaultText"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/bluetoothText"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp" />
-
-    <!-- TextView for Device List label (right) -->
-    <TextView
-        android:id="@+id/searchLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Search"
-        style="@style/DefaultText"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/bluetoothText"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
-
-    <!-- ListView to display available devices -->
-<!--    <ListView-->
-<!--        android:id="@+id/deviceList"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        android:divider="@android:color/darker_gray"-->
-<!--        android:dividerHeight="1dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/searchLabel"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/connectButton"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginBottom="16dp"/>-->
-
-    <!-- TextView for Search label (left) -->
-    <TextView
-        android:id="@+id/deviceList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/DefaultText"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/deviceListLabel"
-        app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp" />
-
-    <!-- TextView for Device List label (right) -->
-    <TextView
-        android:id="@+id/addressList"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/DefaultText"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/searchLabel"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp" />
-
-
-    <!-- Button to connect to selected RFID device -->
-    <Button
-        android:id="@+id/connectButton"
-        style="@style/ButtonDefault"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Connect to RFID"
-        android:backgroundTint="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:valueFrom="0"
+        android:value="50"
+        android:valueTo="100"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

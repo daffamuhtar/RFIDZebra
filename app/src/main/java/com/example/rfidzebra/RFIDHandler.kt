@@ -159,6 +159,22 @@ class RFIDHandler(
         }
     }
 
+    fun setAntenna() {
+        try {
+            // get the configuration
+            val antennaRfConfig = reader!!.Config.Antennas.getAntennaRfConfig(1)
+//            antennaRfConfig.setrfModeTableIndex(0)
+//            antennaRfConfig.tari = 0
+            antennaRfConfig.transmitPowerIndex = 300
+            // set the configuration
+            reader!!.Config.Antennas.setAntennaRfConfig(1, antennaRfConfig)
+        } catch (e: InvalidUsageException) {
+            e.printStackTrace()
+        } catch (e: OperationFailureException) {
+            e.printStackTrace()
+        }
+    }
+
     override fun dcssdkEventScannerAppeared(dcsScannerInfo: DCSScannerInfo) {}
     override fun dcssdkEventScannerDisappeared(i: Int) {}
     override fun dcssdkEventCommunicationSessionEstablished(dcsScannerInfo: DCSScannerInfo) {}
