@@ -7,13 +7,18 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import com.example.rfidzebra.ui.feature.home.locate.utils.Constants
+import com.zebra.rfid.api3.ACCESS_OPERATION_CODE
+import com.zebra.rfid.api3.ACCESS_OPERATION_STATUS
 import com.zebra.rfid.api3.ENUM_TRANSPORT
 import com.zebra.rfid.api3.ENUM_TRIGGER_MODE
+import com.zebra.rfid.api3.FILTER_ACTION
 import com.zebra.rfid.api3.HANDHELD_TRIGGER_EVENT_TYPE
 import com.zebra.rfid.api3.INVENTORY_STATE
 import com.zebra.rfid.api3.InvalidUsageException
 import com.zebra.rfid.api3.MEMORY_BANK
 import com.zebra.rfid.api3.OperationFailureException
+import com.zebra.rfid.api3.PreFilters
 import com.zebra.rfid.api3.RFIDReader
 import com.zebra.rfid.api3.ReaderDevice
 import com.zebra.rfid.api3.Readers
@@ -24,8 +29,10 @@ import com.zebra.rfid.api3.RfidStatusEvents
 import com.zebra.rfid.api3.SESSION
 import com.zebra.rfid.api3.SL_FLAG
 import com.zebra.rfid.api3.START_TRIGGER_TYPE
+import com.zebra.rfid.api3.STATE_AWARE_ACTION
 import com.zebra.rfid.api3.STATUS_EVENT_TYPE
 import com.zebra.rfid.api3.STOP_TRIGGER_TYPE
+import com.zebra.rfid.api3.TARGET
 import com.zebra.rfid.api3.TagAccess
 import com.zebra.rfid.api3.TagData
 import com.zebra.rfid.api3.TriggerInfo
@@ -34,8 +41,7 @@ import com.zebra.scannercontrol.DCSScannerInfo
 import com.zebra.scannercontrol.FirmwareUpdateEvent
 import com.zebra.scannercontrol.IDcsSdkApiDelegate
 import com.zebra.scannercontrol.SDKHandler
-import kotlin.math.log
-
+import java.util.Locale
 
 class RFIDHandler(
     private var context: MainActivity
@@ -81,7 +87,7 @@ class RFIDHandler(
                     reader?.Actions?.TagLocationing?.Stop()
 
                     (context as? Activity)?.runOnUiThread {
-                        Toast.makeText(context, "Locationing for tagID: $tagID completed", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Locate for tagID: $tagID completed", Toast.LENGTH_SHORT).show()
                     }
                 }, 3000)
 
@@ -153,6 +159,71 @@ class RFIDHandler(
         }
     }
 
+    fun setRead() {
+        try {
+            // Read user memory bank for the given tag ID
+            val tagId = "E280689400004024B078209C"
+            val tagAccess = TagAccess()
+            val readAccessParams = tagAccess.ReadAccessParams()
+            readAccessParams.accessPassword = 0
+
+            readAccessParams.count = 4
+
+            readAccessParams.memoryBank = MEMORY_BANK.MEMORY_BANK_EPC
+
+            readAccessParams.offset = 0
+
+            val tagData = reader!!.Actions.TagAccess.readWait(tagId, readAccessParams, null)
+
+//            Toast.makeText(context, "tagID: $tagId", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "Memory: ${data.memoryBankData}", Toast.LENGTH_SHORT).show()
+
+            if (tagData != null) {
+                val readAccessOperation: ACCESS_OPERATION_CODE = tagData.opCode
+                if (readAccessOperation != null) {
+                    if (tagData.opStatus != null && !tagData.opStatus
+                            .equals(ACCESS_OPERATION_STATUS.ACCESS_SUCCESS)
+                    ) {
+                        val strErr: String = tagData.opStatus.toString().replace("_", " ")
+                        Toast.makeText(
+                            context,
+                            strErr.lowercase(Locale.getDefault()),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        if (tagData.opCode === ACCESS_OPERATION_CODE.ACCESS_OPERATION_READ) {
+                            Toast.makeText(
+                                context,
+                                "Berhasil " + tagData.memoryBankData,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.d("MEMORY BANK", "Memory TID : ${tagData.memoryBankData}")
+                        } else {
+
+                        }
+                    }
+                } else {
+                    showToastError("Data success to write")
+
+                    Constants.logAsMessage(
+                        Constants.TYPE_DEBUG,
+                        "ACCESS READ",
+                        "memoryBankData is null"
+                    )
+                }
+            } else {
+                showToastError("Data success to write")
+            }
+
+        } catch (e: InvalidUsageException) {
+            e.printStackTrace()
+            showToastError("Failed to set data")
+        } catch (e: OperationFailureException) {
+            e.printStackTrace()
+            showToastError("Failed to set data 1")
+        }
+    }
+
     fun setWrite() {
 
         val tagsToWrite = listOf(
@@ -195,10 +266,47 @@ class RFIDHandler(
     }
 
 
+    fun setPrefilter() {
+        try {
+
+        } catch (e: InvalidUsageException) {
+            e.printStackTrace()
+        } catch (e: OperationFailureException) {
+            e.printStackTrace()
+        }
+    }
+
+    // Add state aware pre-filter for given EPC or Tag ID
+    fun addFilters(tag: String) {
+        // Add state aware pre-filter
+        val filters = PreFilters()
+        val filter = filters.PreFilter()
+        filter.antennaID = 1.toShort() // Set this filter for Antenna ID 1
+        filter.setTagPattern(tag) // Tags which starts with passed pattern
+        filter.tagPatternBitCount = tag.length * 4
+        filter.bitOffset = 32 // skip PC bits (always it should be in bit length)
+        filter.memoryBank = MEMORY_BANK.MEMORY_BANK_EPC
+        filter.filterAction = FILTER_ACTION.FILTER_ACTION_STATE_AWARE // use state aware singulation
+        filter.StateAwareAction.target =
+            TARGET.TARGET_INVENTORIED_STATE_S1 // inventoried flag of session S1 of matching tags to B
+        filter.StateAwareAction.stateAwareAction =
+            STATE_AWARE_ACTION.STATE_AWARE_ACTION_INV_B_NOT_INV_A
+        // not to select tags that match the criteria
+        try {
+            reader!!.Actions.PreFilters.add(filter)
+        } catch (e: InvalidUsageException) {
+            e.printStackTrace()
+        } catch (e: OperationFailureException) {
+            e.printStackTrace()
+        }
+    }
+
+    // Helper method to show success toast
     private fun showToastSuccess(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
+    // Helper method to show error toast
     private fun showToastError(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
@@ -516,7 +624,18 @@ class RFIDHandler(
     @Synchronized
     fun performInventory() {
         try {
-            reader!!.Actions.Inventory.perform()
+            // Read all memory banks
+            val memoryBanksToRead = arrayOf(MEMORY_BANK.MEMORY_BANK_EPC, MEMORY_BANK.MEMORY_BANK_TID, MEMORY_BANK.MEMORY_BANK_USER);
+            for (bank in memoryBanksToRead) {
+                val ta = TagAccess()
+                val sequence = ta.Sequence(ta)
+                val op = sequence.Operation()
+                op.accessOperationCode = ACCESS_OPERATION_CODE.ACCESS_OPERATION_READ
+                op.ReadAccessParams.memoryBank = bank ?: throw IllegalArgumentException("bank must not be null")
+                reader!!.Actions.TagAccess.OperationSequence.add(op)
+            }
+
+            reader!!.Actions.TagAccess.OperationSequence.performSequence()
         } catch (e: InvalidUsageException) {
             e.printStackTrace()
         } catch (e: OperationFailureException) {
@@ -527,7 +646,7 @@ class RFIDHandler(
     @Synchronized
     fun stopInventory() {
         try {
-            reader!!.Actions.Inventory.stop()
+            reader!!.Actions.TagAccess.OperationSequence.stopSequence()
         } catch (e: InvalidUsageException) {
             e.printStackTrace()
         } catch (e: OperationFailureException) {
@@ -542,6 +661,35 @@ class RFIDHandler(
         override fun eventReadNotify(e: RfidReadEvents) {
             val myTags = reader!!.Actions.getReadTags(100)
             if (myTags != null) {
+                val readTagsList = myTags.toList()
+                val tagReadGroup = readTagsList.groupBy { it.tagID }.toMutableMap()
+
+                var epc = ""
+                var tid = ""
+                var usr = ""
+                for (tagKey in tagReadGroup.keys) {
+                    val tagValueList = tagReadGroup[tagKey]
+
+                    for (tagData in tagValueList!!) {
+                        if (tagData.opCode == ACCESS_OPERATION_CODE.ACCESS_OPERATION_READ) {
+                            when (tagData.memoryBank.ordinal) {
+                                MEMORY_BANK.MEMORY_BANK_EPC.ordinal -> epc = getMemBankData(tagData.memoryBankData, tagData.opStatus)
+                                MEMORY_BANK.MEMORY_BANK_TID.ordinal -> tid = getMemBankData(tagData.memoryBankData, tagData.opStatus)
+                                MEMORY_BANK.MEMORY_BANK_USER.ordinal -> usr = getMemBankData(tagData.memoryBankData, tagData.opStatus)
+                                MEMORY_BANK.MEMORY_BANK_RESERVED.ordinal -> usr = getMemBankData(tagData.memoryBankData, tagData.opStatus)
+                            }
+                        }
+                    }
+
+                    var myTag = "EPC ${epc}\nTID ${tid}\nUSER ${usr}\n"
+
+                    Log.d("MEMORY", "TAG: ${myTag}")
+
+//                    listener.newTagRead(myTag)
+                }
+            }
+
+            if (myTags != null) {
                 for (index in myTags.indices) {
                     //  Log.d(TAG, "Tag ID " + myTags[index].getTagID());
                     Log.d(
@@ -551,8 +699,16 @@ class RFIDHandler(
                     Log.d(TAG, "RSSI value " + myTags[index].peakRSSI)
                     /* To get the RSSI value*/   //   Log.d(TAG, "RSSI value "+ myTags[index].getPeakRSSI());
                 }
+
                 AsyncDataUpdate().execute(arrayOf(*myTags))
             }
+        }
+
+        fun getMemBankData(memoryBankData : String?, opStatus : ACCESS_OPERATION_STATUS) : String {
+            return if(opStatus != ACCESS_OPERATION_STATUS.ACCESS_SUCCESS){
+                opStatus.toString()
+            } else
+                memoryBankData!!
         }
 
         // Status Event Notification

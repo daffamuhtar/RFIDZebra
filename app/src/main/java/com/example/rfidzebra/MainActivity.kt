@@ -303,6 +303,8 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
             tagCountMap.clear()
             adapter.notifyDataSetChanged()
 
+//            rfidHandler!!.addFilters("E28")
+
             rfidHandler!!.performInventory()
 
             binding.TestButton.isEnabled = false
