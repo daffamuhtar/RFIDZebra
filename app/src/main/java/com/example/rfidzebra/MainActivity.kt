@@ -346,9 +346,9 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
                     val currentCount = tagCountMap.getOrDefault(it.tagID, 0)
                     tagCountMap[it.tagID] = currentCount + 1
 
-                    if (!tagDataList.any { tag -> tag.tagID == it.tagID }) {
+//                    if (!tagDataList.any { tag -> tag.tagID == it.tagID }) {
                         tagDataList.add(it)
-                    }
+//                    }
                 }
             }
 
