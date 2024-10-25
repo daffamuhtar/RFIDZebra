@@ -40,7 +40,7 @@ class TagAdapter(private val tagDataList: MutableList<TagData>, private val tagC
         holder.tagSeenCount.text = "Tag Seen Count: ${data.tagSeenCount}"
         holder.phaseInfo.text = "Phase Info: ${data.phase}"
         holder.channelIndex.text = "Channel Index: ${data.channelIndex}"
-        holder.memoryBankData.text = "Memory Bank Data: ${data.memoryBankData}"
+        holder.memoryBankData.text = "Memory Bank: ${data.memoryBank}\nMemory Bank Data: ${data.memoryBankData}"
         holder.tid.text = "TID: ${data.tid}"
         holder.userData.text = "User Data: ${data.user}"
 
@@ -48,4 +48,5 @@ class TagAdapter(private val tagDataList: MutableList<TagData>, private val tagC
     }
 
     override fun getItemCount(): Int = tagDataList.size
+
 }

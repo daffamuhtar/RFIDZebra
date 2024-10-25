@@ -371,6 +371,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
         }
     }
 
+
     override fun barcodeData(`val`: String?) {
         TODO("Not yet implemented")
     }
