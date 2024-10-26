@@ -7,13 +7,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rfidzebra.ui.TagItem
-import com.zebra.rfid.api3.TagData
 
-class TagAdapter(
-    private val tagDataList: MutableList<TagData>,
+class CustomTagAdapter(
+    private val tagDataList: MutableList<CustomTagData>,
     private val tagCountMap: MutableMap<String, Int>
 ) :
-    RecyclerView.Adapter<TagAdapter.TagDataViewHolder>() {
+    RecyclerView.Adapter<CustomTagAdapter.TagDataViewHolder>() {
 
     inner class TagDataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tagID: TextView = itemView.findViewById(R.id.tvTagID)
@@ -36,19 +35,22 @@ class TagAdapter(
 
     override fun onBindViewHolder(holder: TagDataViewHolder, position: Int) {
         val data = tagDataList[position]
-        holder.tagID.text = "Tag ID: ${data.tagID}"
-        holder.peakRSSI.text = "Peak RSSI: ${data.peakRSSI}"
-        holder.antennaID.text = "Antenna ID: ${data.antennaID}"
-        holder.crc.text = "CRC: ${data.crc}"
-        holder.tagSeenCount.text = "Tag Seen Count: ${data.tagSeenCount}"
-        holder.phaseInfo.text = "Phase Info: ${data.phase}"
-        holder.channelIndex.text = "Channel Index: ${data.channelIndex}"
+        holder.tagID.text = "Tag ID: ${data.m_sTagID}"
+        holder.peakRSSI.text = "Peak RSSI: ${data.m_PeakRSSI}"
+        holder.antennaID.text = "Antenna ID: ${data.m_AntennaID}"
+        holder.crc.text = "CRC: ${data.m_CRC}"
+        holder.tagSeenCount.text = "Tag Seen Count: ${data.m_TagSeenCount}"
+        holder.phaseInfo.text = "Phase Info: ${data.m_PhaseInfo}"
+        holder.channelIndex.text = "Channel Index: ${data.m_ChannelIndex}"
         holder.memoryBankData.text =
-            "Memory Bank: ${data.memoryBank}\nMemory Bank Data: ${data.memoryBankData}"
-        holder.tid.text = "TID: ${data.tid}"
-        holder.userData.text = "User Data: ${data.user}"
+            "Memory Bank EPC = ${data.memoryBankEPC} \n" +
+                    "Memory Bank User = ${data.memoryBankUser} \n" +
+                    "Memory Bank TID = ${data.memoryBankTID} \n" +
+                    "Memory Bank Reserved = ${data.memoryBankReserved} \n"
+//        holder.tid.text = "TID: ${data.tid}"
+//        holder.userData.text = "User Data: ${data.user}"
 
-        holder.tagIDCount.text = tagCountMap[data.tagID].toString()
+        holder.tagIDCount.text = tagCountMap[data.m_sTagID].toString()
     }
 
     override fun getItemCount(): Int = tagDataList.size

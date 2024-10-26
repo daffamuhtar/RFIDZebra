@@ -21,8 +21,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.rfidzebra.databinding.ActivityMainBinding
 import com.example.rfidzebra.ui.TagItem
+import com.zebra.rfid.api3.ACCESS_OPERATION_CODE
+import com.zebra.rfid.api3.ACCESS_OPERATION_STATUS
+import com.zebra.rfid.api3.AccessOperationResult
 import com.zebra.rfid.api3.BatteryStatistics
+import com.zebra.rfid.api3.GEN2V2_OPERATION_CODE
+import com.zebra.rfid.api3.GEN2V2_OPERATION_STATUS
+import com.zebra.rfid.api3.LocationInfo
 import com.zebra.rfid.api3.MEMORY_BANK
+import com.zebra.rfid.api3.SYSTEMTIME
+import com.zebra.rfid.api3.SeenTime
 import com.zebra.rfid.api3.TagData
 
 class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
@@ -37,7 +45,9 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
     }
 
     private lateinit var adapter: TagAdapter
+    private lateinit var customTagAdapter: CustomTagAdapter
     private val tagDataList = mutableListOf<TagData>()
+    private var customTagDataList = mutableListOf<CustomTagData>()
     private val tagCountMap = mutableMapOf<String, Int>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,7 +175,9 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewTags)
         recyclerView.layoutManager = LinearLayoutManager(this)
         adapter = TagAdapter(tagDataList, tagCountMap)
-        recyclerView.adapter = adapter
+
+        customTagAdapter = CustomTagAdapter(customTagDataList, tagCountMap)
+        recyclerView.adapter = customTagAdapter
 
     }
 
@@ -230,11 +242,19 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
         if (bluetoothAdapter == null) {
             binding.textViewStatusrfid.text = "Bluetooth is not supported on this device."
             binding.connectButton.isEnabled = false
-            Toast.makeText(this, "Bluetooth is turned off. Please enable it to connect.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Bluetooth is turned off. Please enable it to connect.",
+                Toast.LENGTH_SHORT
+            ).show()
         } else if (!bluetoothAdapter!!.isEnabled) {
             binding.textViewStatusrfid.text = "Bluetooth is turned off. Please enable it."
             binding.connectButton.isEnabled = false
-            Toast.makeText(this, "Bluetooth is turned off. Please enable it to connect.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "Bluetooth is turned off. Please enable it to connect.",
+                Toast.LENGTH_SHORT
+            ).show()
         } else {
             binding.textViewStatusrfid.text = "Bluetooth is turned on."
             binding.connectButton.isEnabled = true
@@ -250,10 +270,16 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
                         binding.textViewStatusrfid.text = "Bluetooth is turned on."
                         binding.connectButton.isEnabled = true
                     }
+
                     BluetoothAdapter.STATE_OFF -> {
-                        binding.textViewStatusrfid.text = "Bluetooth is turned off. Please enable it."
+                        binding.textViewStatusrfid.text =
+                            "Bluetooth is turned off. Please enable it."
                         binding.connectButton.isEnabled = false
-                        Toast.makeText(context, "Bluetooth is turned off. Please enable it to connect.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            "Bluetooth is turned off. Please enable it to connect.",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -346,9 +372,108 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
                     val currentCount = tagCountMap.getOrDefault(it.tagID, 0)
                     tagCountMap[it.tagID] = currentCount + 1
 
-//                    if (!tagDataList.any { tag -> tag.tagID == it.tagID }) {
+                    if (!tagDataList.any { tag -> tag.tagID == it.tagID }) {
                         tagDataList.add(it)
-//                    }
+                    }
+
+                    //set custom tag data 
+                    if (!customTagDataList.any { tag -> tag.m_sTagID == it.tagID }) {
+
+                        var dataEPC: String? = null
+                        var dataTID: String? = null
+                        var dataUser: String? = null
+                        var dataReserved: String? = null
+
+                        when (it.memoryBank) {
+                            MEMORY_BANK.MEMORY_BANK_EPC -> dataEPC =
+                                it.memoryBankData
+
+                            MEMORY_BANK.MEMORY_BANK_TID -> dataTID =
+                                it.memoryBankData
+
+                            MEMORY_BANK.MEMORY_BANK_USER -> dataUser =
+                                it.memoryBankData
+
+                            MEMORY_BANK.MEMORY_BANK_RESERVED -> dataReserved =
+                                it.memoryBankData
+                        }
+
+                        val customtagData: CustomTagData = CustomTagData(
+                            it.LocationInfo,
+                            it.MultiTagLocateInfo,
+                            it.SeenTime,
+                            it.AccessOperationResult,
+                            it.tagID,
+                            it.tagIDAllocatedSize,
+                            it.pc,
+                            it.xpC_W1,
+                            it.crc,
+                            it.stringCRC,
+                            it.antennaID,
+                            it.peakRSSI,
+                            it.m_PhaseInfo,
+                            it.channelIndex,
+                            it.channel,
+                            it.tagSeenCount,
+                            it.numberOfWords,
+                            it.opCode,
+                            it.g2v2OpCode,
+                            it.opStatus,
+                            it.g2v2OpStatus,
+                            it.memoryBank,
+                            it.memoryBankData,
+                            it.g2v2Response,
+                            it.memoryBankDataOffset,
+                            it.memoryBankDataAllocatedSize,
+                            it.tagEvent,
+                            it.tagEventTimeStamp,
+                            it.isContainsLocationInfo,
+                            it.isContainsMultiTagLocateInfo,
+                            it.permaLockData,
+                            it.brandIDStatus,
+                            it.tid,
+                            it.user,
+                            it.channel,
+                            it.m_brandValid,
+                            it.AccessOptErrorCode,
+                            it.accessOperationStatus,
+                            it.crc,
+                            it.tagControlData,
+                            dataUser,
+                            dataEPC,
+                            dataReserved,
+                            dataTID,
+                        )
+
+                        customTagDataList.add(customtagData)
+
+
+
+                    } else {
+                        var index = 0
+
+                        for (tag in customTagDataList) {
+                            if (tag.m_sTagID == it.tagID) {
+                                when (it.memoryBank) {
+                                    MEMORY_BANK.MEMORY_BANK_EPC -> customTagDataList.get(index).memoryBankEPC =
+                                        it.memoryBankData
+
+                                    MEMORY_BANK.MEMORY_BANK_TID -> customTagDataList.get(index).memoryBankTID =
+                                        it.memoryBankData
+
+                                    MEMORY_BANK.MEMORY_BANK_USER -> customTagDataList.get(index).memoryBankUser =
+                                        it.memoryBankData
+
+                                    MEMORY_BANK.MEMORY_BANK_RESERVED -> customTagDataList.get(index).memoryBankReserved =
+                                        it.memoryBankData
+                                }
+
+                            }
+                            index += 1
+
+                        }
+
+                    }
                 }
             }
 
