@@ -327,7 +327,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
         if (isRFIDConnected()) {
             tagDataList.clear()
             tagCountMap.clear()
-            adapter.notifyDataSetChanged()
+            customTagAdapter.notifyDataSetChanged()
 
 //            rfidHandler!!.addFilters("E28")
 
@@ -361,7 +361,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
     fun clearTagID() {
         tagDataList.clear()
         tagCountMap.clear()
-        adapter.notifyDataSetChanged()
+        customTagAdapter.notifyDataSetChanged()
         Log.d("RecyclerView", "TAG data cleared")
     }
 
@@ -478,7 +478,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
             }
 
             runOnUiThread {
-                adapter.notifyDataSetChanged()
+                customTagAdapter.notifyDataSetChanged()
             }
         }
     }
@@ -488,7 +488,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
             runOnUiThread {
                 tagDataList.clear()
                 tagCountMap.clear()
-                adapter.notifyDataSetChanged()
+                customTagAdapter.notifyDataSetChanged()
             }
             rfidHandler!!.performInventory()
         } else {
