@@ -325,7 +325,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
 
     fun StartInventory(view: View?) {
         if (isRFIDConnected()) {
-            tagDataList.clear()
+            customTagDataList.clear()
             tagCountMap.clear()
             customTagAdapter.notifyDataSetChanged()
 
@@ -359,7 +359,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
 
 
     fun clearTagID() {
-        tagDataList.clear()
+        customTagDataList.clear()
         tagCountMap.clear()
         customTagAdapter.notifyDataSetChanged()
         Log.d("RecyclerView", "TAG data cleared")
@@ -486,7 +486,7 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
     override fun handleTriggerPress(pressed: Boolean) {
         if (pressed) {
             runOnUiThread {
-                tagDataList.clear()
+                customTagDataList.clear()
                 tagCountMap.clear()
                 customTagAdapter.notifyDataSetChanged()
             }
