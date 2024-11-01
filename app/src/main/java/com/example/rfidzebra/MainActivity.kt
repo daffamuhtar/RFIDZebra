@@ -120,13 +120,22 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
             }
         }
 
-        binding.buttonWrite.setOnClickListener {
+        binding.buttonPrefilter.setOnClickListener {
             if (isRFIDConnected()) {
-                setWriteData()
+                val specificTag = "00B07A14D821EA504800064A" // Replace with actual Tag ID or EPC pattern
+                setPrefilter(specificTag)
             } else {
                 showToastError("RFID not connected. Please connect first.")
             }
         }
+
+//        binding.buttonProfile.setOnClickListener {
+//            if (isRFIDConnected()) {
+//                setProfilesData()
+//            } else {
+//                showToastError("RFID not connected. Please connect first.")
+//            }
+//        }
 //        binding.buttonBattery.setOnClickListener {
 //            if (isRFIDConnected()) {
 //                displayBatteryStatistics()
@@ -224,6 +233,22 @@ class MainActivity : AppCompatActivity(), RFIDHandler.ResponseHandlerInterface {
             rfidHandler?.setWrite()
         } catch (e: Exception) {
             showToastError("Failed to start write")
+        }
+    }
+
+    private fun setProfilesData() {
+        try {
+            rfidHandler?.setProfiles()
+        } catch (e: Exception) {
+            showToastError("Failed to start write")
+        }
+    }
+
+    private fun setPrefilter(tag: String) {
+        try {
+            rfidHandler?.addFilters(tag)
+        } catch (e: Exception) {
+            showToastError("Failed to set prefilter")
         }
     }
 

@@ -10,6 +10,7 @@ import android.widget.Toast
 import com.example.rfidzebra.ui.feature.home.locate.utils.Constants
 import com.zebra.rfid.api3.ACCESS_OPERATION_CODE
 import com.zebra.rfid.api3.ACCESS_OPERATION_STATUS
+import com.zebra.rfid.api3.BEEPER_VOLUME
 import com.zebra.rfid.api3.ENUM_TRANSPORT
 import com.zebra.rfid.api3.ENUM_TRIGGER_MODE
 import com.zebra.rfid.api3.FILTER_ACTION
@@ -276,31 +277,53 @@ class RFIDHandler(
         }
     }
 
-    // Add state aware pre-filter for given EPC or Tag ID
     fun addFilters(tag: String) {
-        // Add state aware pre-filter
         val filters = PreFilters()
         val filter = filters.PreFilter()
         filter.antennaID = 1.toShort() // Set this filter for Antenna ID 1
-        filter.setTagPattern(tag) // Tags which starts with passed pattern
-        filter.tagPatternBitCount = tag.length * 4
-        filter.bitOffset = 32 // skip PC bits (always it should be in bit length)
+        filter.setTagPattern(tag) // Set the tag pattern for filtering
+        filter.tagPatternBitCount = tag.length * 4 // Calculate bit length of tag pattern
+        filter.bitOffset = 4 // Skip PC bits (bit offset)
         filter.memoryBank = MEMORY_BANK.MEMORY_BANK_EPC
-        filter.filterAction = FILTER_ACTION.FILTER_ACTION_STATE_AWARE // use state aware singulation
-        filter.StateAwareAction.target =
-            TARGET.TARGET_INVENTORIED_STATE_S1 // inventoried flag of session S1 of matching tags to B
-        filter.StateAwareAction.stateAwareAction =
-            STATE_AWARE_ACTION.STATE_AWARE_ACTION_INV_B_NOT_INV_A
-        // not to select tags that match the criteria
+        filter.filterAction = FILTER_ACTION.FILTER_ACTION_STATE_AWARE // Use state-aware singulation
+        filter.StateAwareAction.target = TARGET.TARGET_INVENTORIED_STATE_S1 // Target session S1
+        filter.StateAwareAction.stateAwareAction = STATE_AWARE_ACTION.STATE_AWARE_ACTION_INV_B_NOT_INV_A
+
         try {
-            reader!!.Actions.PreFilters.add(filter)
+            reader?.Actions?.PreFilters?.add(filter)
+            showToastSuccess("Prefilter set for tag: $tag")
         } catch (e: InvalidUsageException) {
             e.printStackTrace()
+            showToastError("Invalid usage while setting filter")
         } catch (e: OperationFailureException) {
             e.printStackTrace()
+            showToastError("Operation failed while setting filter")
         }
     }
 
+    fun setProfiles() {
+        try {
+            val profile = reader?.Config?.defaultProfile
+            val profiles = reader?.Config?.rfidProfile
+
+            Log.d("TAG", "Default Profile: $profile")
+            Log.d("TAG", "Available RFID Profiles: $profiles")
+
+            val result: Boolean = reader?.Config?.setRFIDProfile("FASTEST_READ") ?: false
+
+            if (result) {
+                showToastSuccess("RFID profile successfully set to FASTEST_READ!")
+            } else {
+                showToastError("Failed to set RFID profile to FASTEST_READ.")
+            }
+        } catch (e: Exception) {
+            Log.e("TAG", "Error setting RFID profile: ${e.message}")
+            showToastError("An error occurred while setting the RFID profile.")
+        }
+    }
+
+    //
+    //
     // Helper method to show success toast
     private fun showToastSuccess(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
